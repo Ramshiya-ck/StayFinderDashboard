@@ -29,6 +29,16 @@ export default function AdminHotelTable() {
     getHotels();
   }, []);
 
+  useEffect(()=>{
+    const getHotelDelete = async () => {
+      try {
+        
+      } catch (error) {
+        
+      }
+    }
+  })
+
   // Search/filter
   const filteredHotels = hotels.filter(
     (h) =>

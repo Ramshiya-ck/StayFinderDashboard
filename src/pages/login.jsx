@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom'
 import { axiosinstance } from '../config/axiosinstance'
 import { FcGoogle } from "react-icons/fc"
 import background from '/images/background.jpeg' // make sure image exists in public/images or src/images
+import { AuthContext } from '../components/AuthHook/Authcontext'
 
 export const Login = () => {
+    const {login } = useContext(AuthContext)
     const {
         register,
         handleSubmit,
@@ -16,6 +18,8 @@ export const Login = () => {
         try {
             const response = await axiosinstance.post('customer/login/', data)
             const token = response.data.data.access
+            login(token)
+            navigate('/')
             localStorage.setItem("admin_token", token)
             alert("user loggined")
         } catch (error) {

@@ -13,7 +13,6 @@ export default function Sidebar() {
     { name: "Customer", icon: <ClipboardList />, path: "/admin/customer" },
     { name: "Logout", icon: <LogOut />, path: "" },
   ];
- 
 
   useEffect(() => {
     const getHotel = async () => {
