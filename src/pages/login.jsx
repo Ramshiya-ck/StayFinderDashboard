@@ -1,13 +1,15 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { axiosinstance } from '../config/axiosinstance'
 import { FcGoogle } from "react-icons/fc"
 import background from '/images/background.jpeg' // make sure image exists in public/images or src/images
 import { AuthContext } from '../components/AuthHook/Authcontext'
+import { useContext, useEffect } from 'react'
 
 export const Login = () => {
-    const {login } = useContext(AuthContext)
+    const navigate = useNavigate()
+    const { login, isAuthenticated } = useContext(AuthContext)
     const {
         register,
         handleSubmit,
@@ -26,6 +28,12 @@ export const Login = () => {
             console.log(error)
         }
     }
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/')
+        }
+    }, [isAuthenticated, navigate])
 
     const handleGoogleLogin = () => {
         console.log("Google login clicked")

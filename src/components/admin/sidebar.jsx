@@ -1,30 +1,47 @@
 import { Home, Building, Bed, ClipboardList,  User, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { axiosinstance } from "../../config/axiosinstance";
 
 export default function Sidebar() {
-  const manager_token = localStorage.getItem("manager_token");
-  console.log("Access token:", manager_token);
+  const handleLogout = async () =>{
+    try {
+      const refresh = localStorage.getItem("refresh_token")
+      if(refresh){
+        await axiosinstance.post('customer/logout/',{refresh})
+      }
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("admin_token")
+      navigate("/login")
+    } catch (error) {
+      console.log("Logout error:", error)
+      
+    }
+  }
+  const admin_token = localStorage.getItem("admin_token");
+  console.log("Access token:", admin_token);
   const [hotel, SetHotel] = useState('')
+  const navigate = useNavigate()
   const menuItems = [
     { name: "Dashboard", icon: <Home />, path: "/admin" },
     { name: "Hotels", icon: <Building />, path: "/admin/hotellist" },
     { name: "Bookings", icon: <ClipboardList />, path: "/admin/booking" },
     { name: "Customer", icon: <ClipboardList />, path: "/admin/customer" },
-    { name: "Logout", icon: <LogOut />, path: "" },
+    { name: "Logout", icon: <LogOut />, action: handleLogout()},
   ];
 
   useEffect(() => {
     const getHotel = async () => {
       try {
-        if (!manager_token) {
+        if (!admin_token) {
           console.error("No token found! Make sure you are logged in.");
           return;
         }
 
         const response = await axiosinstance.get("hotel/hotel/manager/", {
           headers: {
-            Authorization: `Bearer ${manager_token}`, // send token here
+            Authorization: `Bearer ${admin_token}`, // send token here
           },
         });
 
@@ -39,7 +56,10 @@ export default function Sidebar() {
     };
 
     getHotel();
-  }, [manager_token]);
+  }, [admin_token]);
+
+
+
 
   return (
     <div className="w-64 h-screen bg-white shadow-lg flex flex-col">

@@ -22,6 +22,7 @@ import AdminRoomsPage from "../pages/admin_dashboard/rooms";
 import { Login } from "../pages/login";
 import AdminBooking from "../pages/admin_dashboard/bookings";
 import AdminCustomers from "../pages/admin_dashboard/customer";
+import { UserAuth } from "./protectedroutes/UserAuth";
 // import Sidebar from "../components/sidebar";
 
   export const router = createBrowserRouter([
@@ -31,32 +32,37 @@ import AdminCustomers from "../pages/admin_dashboard/customer";
 
       children: [
         {
-        path : "/",
-        element: < Dashboard/>
-        },
-        {
             path:'login',
             element:< Login />
         },
         {
-            path:"rooms/:hotel_id",
-            element:<RoomsPage />
-        },
-        {
-            path: "hotels",
-            element: <Hotel />
-        },
-        {
-            path:"bookings",
-            element:<Booking />
-        },
-        {
-            path:"hoteledit/:id",
-            element:<HotelEdit />
-        },
-        {
-            path:"roomedit/:id",
-            element:<RoomEdit />
+          element: <UserAuth />,
+          children: [
+            {
+              index: true,
+              element: <Dashboard />
+            },
+            {
+              path: "rooms/:hotel_id",
+              element: <RoomsPage />
+            },
+            {
+              path: "hotels",
+              element: <Hotel />
+            },
+            {
+              path: "bookings",
+              element: <Booking />
+            },
+            {
+              path: "hoteledit/:id",
+              element: <HotelEdit />
+            },
+            {
+              path: "roomedit/:id",
+              element: <RoomEdit />
+            }
+          ]
         }
       ]
 
